@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BizInsights Pro</title>
+    <meta
+      name="description"
+      content="BizInsights Pro — Business Intelligence & Analytics Studio"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Primary navigation">
+        <div class="brand-block">
+          <div class="brand-mark">B</div>
+          <div>
+            <div class="brand-name">BizInsights Pro</div>
+            <div class="brand-subtitle">Business Intelligence &amp; Analytics Studio</div>
+          </div>
+        </div>
+
+        <nav class="sidebar-nav" aria-label="Dashboard sections">
+          <button class="nav-item active" type="button" data-view="overview">
+            <span class="nav-icon" aria-hidden="true">◫</span>
+            Overview
+          </button>
+          <button class="nav-item" type="button" data-view="sales">
+            <span class="nav-icon" aria-hidden="true">▤</span>
+            Sales Analysis
+          </button>
+          <button class="nav-item" type="button" data-view="products">
+            <span class="nav-icon" aria-hidden="true">◍</span>
+            Product Performance
+          </button>
+        </nav>
+
+        <div class="sidebar-footer">
+          <button id="openDataManagement" class="secondary-button" type="button">
+            Data Management
+          </button>
+        </div>
+      </aside>
+
+      <main class="main-panel">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Reporting Studio</p>
+            <h1 id="pageTitle">Overview</h1>
+            <p id="pageSubtitle" class="page-subtitle">Executive summary of the business</p>
+          </div>
+          <div class="topbar-meta">
+            <span id="reportingPeriod" class="reporting-period">2026 · All months</span>
+            <span class="demo-tag">DEMO DATA</span>
+          </div>
+        </header>
+
+        <section class="filters-panel" aria-label="Dashboard filters">
+          <div class="filter-group">
+            <label for="monthFilter">Reporting month</label>
+            <select id="monthFilter">
+              <option value="all">All months</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label for="yearFilter">Reporting year</label>
+            <select id="yearFilter"></select>
+          </div>
+
+          <div class="filter-group">
+            <label for="categoryFilter">Product category</label>
+            <select id="categoryFilter">
+              <option value="all">All categories</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label for="productFilter">Product</label>
+            <select id="productFilter">
+              <option value="all">All products</option>
+            </select>
+          </div>
+
+          <button id="resetFilters" class="secondary-button" type="button">
+            Reset filters
+          </button>
+        </section>
+
+        <div id="statusMessage" class="status-message" aria-live="polite"></div>
+
+        <section id="view-overview" class="view active">
+          <div class="metrics-grid" id="overviewKpis"></div>
+
+          <div class="two-column-layout">
+            <div class="panel">
+              <div class="panel-header">
+                <h2>Monthly performance</h2>
+              </div>
+              <div class="chart-wrap large">
+                <canvas id="overviewRevenueTrendChart"></canvas>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-header">
+                <h2>Monthly target status</h2>
+              </div>
+              <div id="targetSummary" class="target-summary"></div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
+              <h2>Business insights</h2>
+            </div>
+            <div id="insightList" class="insight-list"></div>
+          </div>
+
+          <div class="cards-grid">
+            <div class="panel">
+              <div class="panel-header">
+                <h2>Monthly gross profit trend</h2>
+              </div>
+              <div class="chart-wrap">
+                <canvas id="overviewGrossProfitTrendChart"></canvas>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-header">
+                <h2>Monthly net profit trend</h2>
+              </div>
+              <div class="chart-wrap">
+                <canvas id="overviewNetProfitTrendChart"></canvas>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-header">
+                <h2>Revenue by category</h2>
+              </div>
+              <div class="chart-wrap small-chart">
+                <canvas id="overviewCategoryChart"></canvas>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-header">
+                <h2>Top business metrics</h2>
+              </div>
+              <div id="overviewSummaryStats" class="summary-list"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="view-sales" class="view">
+          <div class="metrics-grid compact" id="salesKpis"></div>
+
+          <div class="cards-grid sales-grid">
+            <div class="panel">
+              <div class="panel-header">
+                <h2>Revenue and profit by month</h2>
+              </div>
+              <div class="chart-wrap">
+                <canvas id="salesTrendChart"></canvas>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-header">
+                <h2>Revenue by category</h2>
+              </div>
+              <div class="chart-wrap small-chart">
+                <canvas id="salesCategoryChart"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <div class="two-column-layout">
+            <div class="panel">
+              <div class="panel-header">
+                <h2>Monthly sales comparison</h2>
+              </div>
+              <div id="periodComparison" class="comparison-box"></div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-header">
+                <h2>Category contribution</h2>
+              </div>
+              <div id="categoryContribution" class="summary-list"></div>
+            </div>
+          </div>
+
+          <div class="panel table-panel">
+            <div class="panel-header">
+              <h2>Detailed monthly sales table</h2>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Month</th>
+                    <th>Revenue</th>
+                    <th>Gross Profit</th>
+                    <th>Units</th>
+                    <th>Net Profit</th>
+                    <th>Growth</th>
+                  </tr>
+                </thead>
+                <tbody id="salesMonthlyTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section id="view-products" class="view">
+          <div class="metrics-grid compact" id="productKpis"></div>
+
+          <div class="cards-grid product-grid">
+            <div class="panel">
+              <div class="panel-header">
+                <h2>Revenue ranking by product</h2>
+              </div>
+              <div class="chart-wrap">
+                <canvas id="productRevenueChart"></canvas>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-header">
+                <h2>Units sold by product</h2>
+              </div>
+              <div class="chart-wrap">
+                <canvas id="productUnitsChart"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel table-panel">
+            <div class="panel-header product-header">
+              <h2>Product performance table</h2>
+              <div class="table-controls">
+                <label class="sr-only" for="productSearch">Search products</label>
+                <input
+                  id="productSearch"
+                  type="search"
+                  placeholder="Search product or category"
+                  aria-label="Search product or category"
+                />
+                <select id="productSortSelect" aria-label="Sort products by">
+                  <option value="revenue-desc">Revenue: high to low</option>
+                  <option value="revenue-asc">Revenue: low to high</option>
+                  <option value="units-desc">Units: high to low</option>
+                  <option value="units-asc">Units: low to high</option>
+                  <option value="profit-desc">Profit: high to low</option>
+                  <option value="profit-asc">Profit: low to high</option>
+                  <option value="margin-desc">Margin: high to low</option>
+                  <option value="margin-asc">Margin: low to high</option>
+                </select>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Product</th>
+                    <th>Category</th>
+                    <th>Units</th>
+                    <th>Unit Price</th>
+                    <th>Unit Cost</th>
+                    <th>Revenue</th>
+                    <th>COGS</th>
+                    <th>Gross Profit</th>
+                    <th>Margin</th>
+                    <th>Contribution</th>
+                    <th>Badge</th>
+                  </tr>
+                </thead>
+                <tbody id="productTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div id="dataModal" class="modal hidden" aria-hidden="true">
+      <div class="modal-backdrop" data-close-modal="true"></div>
+      <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="dataModalTitle">
+        <div class="modal-header">
+          <h2 id="dataModalTitle">Data Management</h2>
+          <button id="closeDataManagement" class="icon-button" type="button" aria-label="Close data management">
+            ×
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <div class="data-export-actions">
+            <button type="button" class="secondary-button" id="exportSalesCsv">Export sales CSV</button>
+            <button type="button" class="secondary-button" id="exportExpenseCsv">Export expenses CSV</button>
+            <button type="button" class="secondary-button" id="exportProductCsv">Export product report CSV</button>
+            <button type="button" class="secondary-button danger" id="restoreDemoData">Restore original demo data</button>
+          </div>
+
+          <div class="modal-grid">
+            <section class="panel compact-panel">
+              <div class="panel-header">
+                <h3>Sales records</h3>
+              </div>
+              <div id="salesTableContainer" class="table-wrap small-table"></div>
+              <form id="salesForm" class="data-form">
+                <h4>Add or edit sales record</h4>
+                <div class="field-grid two-columns">
+                  <div>
+                    <label for="salesTransactionId">Transaction ID</label>
+                    <input id="salesTransactionId" name="transactionId" type="text" required />
+                  </div>
+                  <div>
+                    <label for="salesDate">Date</label>
+                    <input id="salesDate" name="date" type="date" required />
+                  </div>
+                  <div>
+                    <label for="salesProductName">Product name</label>
+                    <input id="salesProductName" name="productName" type="text" required />
+                  </div>
+                  <div>
+                    <label for="salesCategory">Category</label>
+                    <input id="salesCategory" name="category" type="text" required />
+                  </div>
+                  <div>
+                    <label for="salesQuantity">Quantity</label>
+                    <input id="salesQuantity" name="quantity" type="number" min="1" step="1" required />
+                  </div>
+                  <div>
+                    <label for="salesUnitPrice">Unit selling price</label>
+                    <input id="salesUnitPrice" name="unitPrice" type="number" min="0.01" step="0.01" required />
+                  </div>
+                  <div>
+                    <label for="salesUnitCost">Unit cost</label>
+                    <input id="salesUnitCost" name="unitCost" type="number" min="0" step="0.01" required />
+                  </div>
+                  <div>
+                    <label for="salesRecordMode">Action</label>
+                    <input id="salesRecordMode" type="text" value="add" readonly aria-readonly="true" />
+                  </div>
+                </div>
+                <div class="form-actions">
+                  <button type="submit" class="primary-button">Save sales record</button>
+                  <button type="button" class="secondary-button" id="cancelSalesEdit">Cancel</button>
+                </div>
+              </form>
+            </section>
+
+            <section class="panel compact-panel">
+              <div class="panel-header">
+                <h3>Operating expenses</h3>
+              </div>
+              <div id="expenseTableContainer" class="table-wrap small-table"></div>
+              <form id="expenseForm" class="data-form">
+                <h4>Add or edit expense</h4>
+                <div class="field-grid two-columns">
+                  <div>
+                    <label for="expenseId">Expense ID</label>
+                    <input id="expenseId" name="expenseId" type="text" required />
+                  </div>
+                  <div>
+                    <label for="expenseDate">Date</label>
+                    <input id="expenseDate" name="date" type="date" required />
+                  </div>
+                  <div>
+                    <label for="expenseCategory">Category</label>
+                    <select id="expenseCategory" name="category" required>
+                      <option value="Marketing">Marketing</option>
+                      <option value="Transport">Transport</option>
+                      <option value="Rent">Rent</option>
+                      <option value="Packaging">Packaging</option>
+                      <option value="Utilities">Utilities</option>
+                      <option value="Other operating costs">Other operating costs</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label for="expenseAmount">Amount</label>
+                    <input id="expenseAmount" name="amount" type="number" min="0.01" step="0.01" required />
+                  </div>
+                  <div class="span-two">
+                    <label for="expenseDescription">Description</label>
+                    <input id="expenseDescription" name="description" type="text" required />
+                  </div>
+                  <div>
+                    <label for="expenseActionMode">Action</label>
+                    <input id="expenseActionMode" type="text" value="add" readonly aria-readonly="true" />
+                  </div>
+                </div>
+                <div class="form-actions">
+                  <button type="submit" class="primary-button">Save expense</button>
+                  <button type="button" class="secondary-button" id="cancelExpenseEdit">Cancel</button>
+                </div>
+              </form>
+            </section>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
